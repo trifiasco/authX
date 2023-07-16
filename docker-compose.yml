@@ -1,0 +1,43 @@
+version: "3.5"
+
+services:
+  flask-backend:
+    build:
+      context: flaskBackend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - local
+    environment:
+      VIRTUAL_HOST: localhost
+      VIRTUAL_PORT: 3000
+      VIRTUAL_PATH: /flask-backend
+
+  authx-v1:
+    build:
+      context: authX_V1
+      dockerfile: Dockerfile
+    ports:
+      - "3010:3010"
+    networks:
+      - local
+    environment:
+      VIRTUAL_HOST: localhost
+      VIRTUAL_PORT: 3010
+      VIRTUAL_PATH: /authx
+
+
+  django-api:
+    container_name: django
+    build:
+      context: djangoAPI
+      dockerfile: Dockerfile
+    command: python3 manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    networks:
+      - local
+
+networks:
+  local:
